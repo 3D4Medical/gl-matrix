@@ -461,6 +461,57 @@ mat3.normalFromMat4 = function (out, a) {
     return out;
 };
 
+
+mat3.subtract = function (out, a, b) {
+    
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+    out[2] = a[2] - b[2];
+    
+    out[3] = a[3] - b[3];
+    out[4] = a[4] - b[4];
+    out[5] = a[5] - b[5];
+    
+    out[6] = a[6] - b[6];
+    out[7] = a[7] - b[7];
+    out[8] = a[8] - b[8];
+    
+    return out;
+}
+
+mat3.add = function (out, a, b) {
+    
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+    out[2] = a[2] + b[2];
+    
+    out[3] = a[3] + b[3];
+    out[4] = a[4] + b[4];
+    out[5] = a[5] + b[5];
+    
+    out[6] = a[6] + b[6];
+    out[7] = a[7] + b[7];
+    out[8] = a[8] + b[8];
+    
+    return out;
+}
+
+
+mat3.scalar = function (mat, scalar) {
+    var out = mat3.clone(mat);
+    out[0] *= scalar;
+    out[1] *= scalar;
+    out[2] *= scalar;
+    out[3] *= scalar;
+    out[4] *= scalar;
+    out[5] *= scalar;
+    out[6] *= scalar;
+    out[7] *= scalar;
+    out[8] *= scalar;
+    return out;
+}
+
+
 /**
  * Returns a string representation of a mat3
  *

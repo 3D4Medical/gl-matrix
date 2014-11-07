@@ -628,6 +628,51 @@ vec3.angle = function(a, b) {
     }     
 };
 
+vec3.scaleFromMat4 = function(m) {
+    
+    var v = vec3.fromValues(Math.sqrt(m[0]*m[0] + m[1]*m[1] + m[2]*m[2]),
+                            Math.sqrt(m[4]*m[4] + m[5]*m[5] + m[6]*m[6]),
+                            Math.sqrt(m[8]*m[8] + m[9]*m[9] + m[10]*m[10]));
+    
+    return v;
+}
+
+
+vec3.farPoint = function(normalisedVector, matrix) {
+    var v = vec4.clone(normalisedVector);
+    v[2] = 1.0;
+    var far_point = vec4.multiplyMat4(matrix, v);
+    far_point[3] = 1.0/far_point[3];
+    
+    return vec3.fromValues(far_point[0]*far_point[3], far_point[1]*far_point[3], far_point[2]*far_point[3]);
+}
+
+vec3.nearPoint = function(normalisedVector, matrix) {
+    
+    var v = vec4.clone(normalisedVector);
+    v[2] = -1.0;
+    var near_point = vec4.multiplyMat4(matrix, v);
+    near_point[3] = 1.0/near_point[3];
+    
+    return vec3.fromValues(near_point[0]*near_point[3], near_point[1]*near_point[3], near_point[2]*near_point[3]);;
+}
+
+
+vec3.rotationFromMat4 = function(matrix) {
+    
+    var rotate = vec3.create();
+    
+    // decompose main matrix and take just rotation matrix
+    var rMatrix = mat4.getRotationMatrix(matrix);
+    
+    rotate[0] = Math.atan2(rMatrix[9], rMatrix[10]);
+    rotate[1] = Math.atan2(-rMatrix[8], Math.sqrt(rMatrix[9]*rMatrix[9] + rMatrix[10]*rMatrix[10]) );
+    rotate[2] = Math.atan2(rMatrix[0], rMatrix[0]);
+    
+    return rotate;
+}
+
+
 /**
  * Returns a string representation of a vector
  *

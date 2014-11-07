@@ -521,6 +521,22 @@ quat.fromMat3 = (function() {
     };
 })();
 
+
+quat.pitch = function(q) {
+    var pitch = Math.atan2(2*(q[1]*q[2] + q[3]*q[0]), q[3]*q[3] - q[0]*q[0] - q[1]*q[1] + q[2]*q[2]);
+    return pitch;
+}
+
+quat.roll = function(q) {
+    var roll = Math.atan2(2*(q[0]*q[1] + q[3]*q[2]), q[3]*q[3] + q[0]*q[0] - q[1]*q[1] - q[2]*q[2]);
+    return roll;
+}
+
+quat.yaw = function(q) {
+    var yaw = Math.asin(-2*(q[0]*q[2] - q[3]*q[1]));
+    return yaw;
+}
+
 /**
  * Returns a string representation of a quatenion
  *

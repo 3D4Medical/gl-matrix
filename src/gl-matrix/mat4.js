@@ -889,6 +889,177 @@ mat4.lookAt = function (out, eye, center, up) {
     return out;
 };
 
+
+mat4.scalar = function (mat, scalar) {
+    var out = mat4.clone(mat);
+    
+    out[0] *= scalar;
+    out[1] *= scalar;
+    out[2] *= scalar;
+    out[3] *= scalar;
+    out[4] *= scalar;
+    out[5] *= scalar;
+    out[6] *= scalar;
+    out[7] *= scalar;
+    out[8] *= scalar;
+    out[9] *= scalar;
+    out[10] *= scalar;
+    out[11] *= scalar;
+    out[12] *= scalar;
+    out[13] *= scalar;
+    out[14] *= scalar;
+    out[15] *= scalar;
+    
+    return out;
+};
+
+mat4.getRotationMatrix = function(m) {
+    
+    var s = vec3.scaleFromMat4(m);
+    
+    var n_matrix = mat4.create();
+    n_matrix[0] = m[0]/s[0];
+    n_matrix[1] = m[1]/s[0];
+    n_matrix[2] = m[2]/s[0];
+    n_matrix[3] = 0;
+    
+    n_matrix[4] = m[4]/s[1];
+    n_matrix[5] = m[5]/s[1];
+    n_matrix[6] = m[6]/s[1];
+    n_matrix[7] = 0;
+    
+    n_matrix[8] = m[8]/s[2];
+    n_matrix[9] = m[9]/s[2];
+    n_matrix[10] = m[10]/s[2];
+    n_matrix[11] = 0;
+    
+    n_matrix[12] = 0;
+    n_matrix[13] = 0;
+    n_matrix[14] = 0;
+    n_matrix[15] = 1;
+    
+    return n_matrix;
+}
+
+mat4.add = function (out, a, b) {
+    out[0] = a[0] + b[0];
+    out[1] = a[1] + b[1];
+    out[2] = a[2] + b[2];
+    out[3] = a[3] + b[3];
+    
+    out[4] = a[4] + b[4];
+    out[5] = a[5] + b[5];
+    out[6] = a[6] + b[6];
+    out[7] = a[7] + b[7];
+    
+    out[8] = a[8] + b[8];
+    out[9] = a[9] + b[9];
+    out[10] = a[10] + b[10];
+    out[11] = a[11] + b[11];
+    
+    out[12] = a[12] + b[12];
+    out[13] = a[13] + b[13];
+    out[14] = a[14] + b[14];
+    out[15] = a[15] + b[15];
+    
+    return out;
+};
+
+mat4.subtract = function (out, a, b) {
+    
+    out[0] = a[0] - b[0];
+    out[1] = a[1] - b[1];
+    out[2] = a[2] - b[2];
+    out[3] = a[3] - b[3];
+    
+    out[4] = a[4] - b[4];
+    out[5] = a[5] - b[5];
+    out[6] = a[6] - b[6];
+    out[7] = a[7] - b[7];
+    
+    out[8] = a[8] - b[8];
+    out[9] = a[9] - b[9];
+    out[10] = a[10] - b[10];
+    out[11] = a[11] - b[11];
+    
+    out[12] = a[12] - b[12];
+    out[13] = a[13] - b[13];
+    out[14] = a[14] - b[14];
+    out[15] = a[15] - b[15];
+    
+    return out;
+}
+
+mat4.toQuat = function(out, m) {
+    
+    var qw = 1;
+    var qx = 0;
+    var qy = 0;
+    var qz = 0;
+    
+    var tr = m[0] + m[5] + m[10] + 1;
+    
+    //If the trace of the matrix is greater than zero, then
+    //    perform an "instant" calculation.
+    if (tr > 0) {
+        var S = 0.5 / Math.sqrt(tr);
+        qw = 0.25 / S;
+        
+        qx = (m[6] - m[9]) * S;
+        qy = (m[8] - m[2]) * S;
+        qz = (m[1] - m[4]) * S;
+    }
+    /* If the trace of the matrix is less than or equal to zero
+     then identify which major diagonal element has the greatest
+     value.*/
+    else if ((m[0] > m[5]) && (m[0] > m[10])) {
+        var S = Math.sqrt(1.0 + m[0] - m[5] - m[10]) * 2; // S=4*qx
+        qx = 0.5 / S;
+        qy = (m[4] + m[1]) / S;
+        qz = (m[8] + m[2]) / S;
+        qw = (m[9] + m[6]) / S;
+    } else if (m[5] > m[10]) {
+        var S = Math.sqrt(1.0 + m[5] - m[0] - m[10]) * 2; // S=4*qy
+        
+        qx = (m[4] + m[1]) / S;
+        qy = 0.5 / S;
+        qz = (m[9] + m[6]) / S;
+        qw = (m[8] + m[2]) / S;
+        
+    } else {
+        var S = Math.sqrt(1.0 + m[10] - m[5] - m[0]) * 2; // S=4*qz
+        
+        qx = (m[8] + m[2]) / S;
+        qy = (m[9] + m[6]) / S;
+        qz = 0.5 / S;
+        qw = (m[4] + m[1]) / S;
+    }
+    
+    out[0] = qx;
+    out[1] = qy;
+    out[2] = qz;
+    out[3] = qw;
+    return out;
+}
+
+
+/**
+ * Returns a yaw from mat4
+ *
+ * @param {mat4} mat matrix rotation
+ * @returns {Number} yaw angle
+ */
+mat4.yawFromMat4 = function(_r) {
+    var _yaw = 0;
+    if (_r[4] == 1 || _r[4] == -1) {
+        _yaw = Math.atan2(-_r[2],_r[10]);
+    } else {
+        _yaw = Math.atan2(-_r[8],_r[0]);
+    }
+    
+    return _yaw;
+}
+
 /**
  * Returns a string representation of a mat4
  *
