@@ -672,6 +672,16 @@ vec3.rotationFromMat4 = function(matrix) {
     return rotate;
 }
 
+vec3.equals = function(l, r) {
+    return (l[0] == r[0] && l[1] == r[1] && l[2] == r[2]);
+}
+
+vec3.setLength = function(vec, l) {
+    var oldLength = vec3.length(vec);
+    if ( oldLength !== 0 && l !== oldLength ) {
+        vec3.scale(vec, vec, l/oldLength );
+    }
+}
 
 /**
  * Returns a string representation of a vector

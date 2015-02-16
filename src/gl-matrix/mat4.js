@@ -917,28 +917,28 @@ mat4.getRotationMatrix = function(m) {
     
     var s = vec3.scaleFromMat4(m);
     
-    var n_matrix = mat4.create();
-    n_matrix[0] = m[0]/s[0];
-    n_matrix[1] = m[1]/s[0];
-    n_matrix[2] = m[2]/s[0];
-    n_matrix[3] = 0;
+    var out = mat4.create();
+    out[0] = m[0]/s[0];
+    out[1] = m[1]/s[0];
+    out[2] = m[2]/s[0];
+    out[3] = 0;
     
-    n_matrix[4] = m[4]/s[1];
-    n_matrix[5] = m[5]/s[1];
-    n_matrix[6] = m[6]/s[1];
-    n_matrix[7] = 0;
+    out[4] = m[4]/s[1];
+    out[5] = m[5]/s[1];
+    out[6] = m[6]/s[1];
+    out[7] = 0;
     
-    n_matrix[8] = m[8]/s[2];
-    n_matrix[9] = m[9]/s[2];
-    n_matrix[10] = m[10]/s[2];
-    n_matrix[11] = 0;
+    out[8] = m[8]/s[2];
+    out[9] = m[9]/s[2];
+    out[10] = m[10]/s[2];
+    out[11] = 0;
     
-    n_matrix[12] = 0;
-    n_matrix[13] = 0;
-    n_matrix[14] = 0;
-    n_matrix[15] = 1;
+    out[12] = 0;
+    out[13] = 0;
+    out[14] = 0;
+    out[15] = 1;
     
-    return n_matrix;
+    return out;
 }
 
 mat4.add = function (out, a, b) {
