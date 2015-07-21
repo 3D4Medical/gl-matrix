@@ -621,6 +621,27 @@ vec2.forEach = (function() {
     };
 })();
 
+
+vec2.rotatePoint = function (p, angle, pivot_point) {
+    var s = Math.sin(angle);
+    var c = Math.cos(angle);
+    
+    var p_ = vec2.clone(p);
+    
+    // translate point back to origin:
+    p_[0] -= pivot_point[0];
+    p_[1] -= pivot_point[1];
+    
+    // rotate point
+    var xnew = p_[0] * c + p_[1] * s;
+    var ynew = -p_[0] * s + p_[1] * c;
+    
+    // translate point back:
+    p_[0] = xnew + pivot_point[0];
+    p_[1] = ynew + pivot_point[1];
+    return p_;
+}
+
 /**
  * Returns a string representation of a vector
  *
